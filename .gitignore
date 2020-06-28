@@ -10,3 +10,7 @@ roles
 
 # Session
 Session.vim
+
+# Inventory
+inventories/my-ansible-nas/
+

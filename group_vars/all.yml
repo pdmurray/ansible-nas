@@ -606,6 +606,7 @@ openvpn_config_directory: "{{ docker_home }}/openvpn"
 ###
 portainer_available_externally: "false"
 portainer_data_directory: "{{ docker_home }}/portainer/config"
+portainer_certs_directory: "{{ docker_home }}/portainer/certs"
 portainer_port: "9000"
 
 ###
