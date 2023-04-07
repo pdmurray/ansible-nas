@@ -22,9 +22,9 @@
             }
         },
         {
-            "label": "Run ansible-lint",
+            "label": "Run pre-commit checks",
             "type": "shell",
-            "command": "ansible-lint nas.yml",
+            "command": "pre-commit run --all-files",
             "group": "test"
         },
         {

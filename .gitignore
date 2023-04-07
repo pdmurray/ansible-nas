@@ -1,9 +1,13 @@
 tests/test.yml
 site
 .vagrant
-roles
 *.retry
 *.log
+inventories
+.cache
+roles/bertvv.samba
+roles/geerlingguy.docker
+roles/geerlingguy.nfs
 
 # Vim
 [._]sw[a-p]
@@ -11,6 +15,8 @@ roles
 # Session
 Session.vim
 
+# IntelliJ
+/.idea/
+
 # Inventory
 inventories/my-ansible-nas/
-

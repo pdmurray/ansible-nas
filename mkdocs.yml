@@ -1,3 +1,4 @@
+---
 # Project information
 site_name: 'Ansible-NAS'
 site_description: 'Build a fully functional NAS with an Ubuntu box and this playbook'
@@ -21,7 +22,7 @@ repo_name: 'davestephens/ansible-nas'
 repo_url: 'https://github.com/davestephens/ansible-nas'
 
 # Copyright
-copyright: 'Copyright &copy; 2017 - 2020 David Stephens'
+copyright: 'Copyright &copy; 2017 - 2022 David Stephens'
 
 # Customization
 extra:
