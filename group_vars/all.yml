@@ -347,7 +347,7 @@ heimdall_available_externally: "false"
 heimdall_docker_image: linuxserver/heimdall:latest
 heimdall_data_directory: "{{ docker_home }}/heimdall"
 heimdall_port_http: "10080"
-heimdall_port_https: "443"
+heimdall_port_https: "10443"
 
 ###
 ### Organizr
