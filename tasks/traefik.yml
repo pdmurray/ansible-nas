@@ -29,6 +29,7 @@
     network_mode: host
     volumes:
       - "{{ traefik_data_directory }}/traefik.toml:/etc/traefik/traefik.toml:ro"
+      - "{{ traefik_data_directory }}/traefik.log:/var/log/traefik.log:rw"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     restart_policy: unless-stopped
     memory: 1g

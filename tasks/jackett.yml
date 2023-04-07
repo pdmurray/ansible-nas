@@ -18,6 +18,8 @@
       - "{{ jackett_port }}:9117"
     env:
       TZ: "{{ ansible_nas_timezone }}"
+      PUID: "{{ jackett_user_id }}"
+      PGID: "{{ jackett_group_id }}"
     restart_policy: unless-stopped
     labels:
       traefik.backend: "jackett"

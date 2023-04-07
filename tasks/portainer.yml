@@ -17,7 +17,8 @@
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/timezone:/etc/timezone:ro"
     ports:
-      - "{{ portainer_port }}:9000"
+      - "{{ portainer_port }}:9443"
+      - "8000:8000"
     restart_policy: unless-stopped
     memory: 1g
     labels:
