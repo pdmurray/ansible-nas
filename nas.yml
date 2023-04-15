@@ -20,10 +20,10 @@
     #    - nfs
     #    - skip_ansible_lint
 
-    - role: geerlingguy.docker
-      tags:
-        - docker
-        - skip_ansible_lint
+    #- role: geerlingguy.docker
+    #  tags:
+    #    - docker
+    #    - skip_ansible_lint
 
     ###
     ### Ansible-NAS Roles
