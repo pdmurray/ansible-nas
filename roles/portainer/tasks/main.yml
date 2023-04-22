@@ -7,6 +7,7 @@
         state: directory
       with_items:
         - "{{ portainer_data_directory }}"
+
     - name: Portainer Docker Container
       community.docker.docker_container:
         name: "{{ portainer_container_name }}"
@@ -29,7 +30,7 @@
           traefik.http.routers.portainer.tls.domains[0].main: "{{ ansible_nas_domain }}"
           traefik.http.routers.portainer.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
           traefik.http.services.portainer.loadbalancer.server.port: "9443"
-      command: "--ssl --sslcert /certs/portainer.crt --sslkey /certs/portainer.key"
+        command: "--ssl --sslcert /certs/portainer.crt --sslkey /certs/portainer.key"
   when: portainer_enabled is true
 
 - name: Stop Portainer

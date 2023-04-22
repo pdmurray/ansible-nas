@@ -7,6 +7,7 @@
         state: directory
       with_items:
         - "{{ jackett_data_directory }}"
+
     - name: Jackett Docker Container
       community.docker.docker_container:
         name: "{{ jackett_container_name }}"
