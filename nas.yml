@@ -89,6 +89,10 @@
       tags:
         - dashy
 
+    - role: ddclient
+      tags:
+        - ddclient
+
     - role: deluge
       tags:
         - deluge
