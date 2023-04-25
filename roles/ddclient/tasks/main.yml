@@ -18,7 +18,7 @@
 
     - name: Ddclient Docker Container
       community.docker.docker_container:
-        name: ddclient
+        name: "{{ ddclient_container_name }}"
         image: linuxserver/ddclient
         pull: true
         volumes:
