@@ -44,6 +44,7 @@
           PGID: "{{ transmission_openvpn_group_id }}"
           LOCAL_NETWORK: "{{ transmission_openvpn_local_network }}"
           ENABLE_UFW: "false"
+          GLOBAL_APPLY_PERMISSIONS: "false"
         devices:
           - /dev/net/tun
         capabilities:
