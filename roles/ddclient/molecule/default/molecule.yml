@@ -4,4 +4,4 @@ provisioner:
     group_vars:
       all:
         ddclient_enabled: true
-        ansible_nas_user: ansible-nas
+        ansible_nas_user: root
