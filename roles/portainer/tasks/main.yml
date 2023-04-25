@@ -30,7 +30,7 @@
           traefik.http.routers.portainer.tls.domains[0].main: "{{ ansible_nas_domain }}"
           traefik.http.routers.portainer.tls.domains[0].sans: "*.{{ ansible_nas_domain }}"
           traefik.http.services.portainer.loadbalancer.server.port: "9443"
-        command: "{{ '--ssl --sslcert /certs/portainer.crt --sslkey /certs/portainer.key' if portainer_ssl_enabled is true else '' }}" 
+        command: "{{ '--ssl --sslcert /certs/portainer.crt --sslkey /certs/portainer.key' if portainer_ssl_enabled is true else '' }}"
   when: portainer_enabled is true
 
 - name: Stop Portainer
