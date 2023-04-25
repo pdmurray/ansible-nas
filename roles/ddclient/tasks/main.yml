@@ -5,8 +5,8 @@
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
-        owner: "{{ ansible_nas_user }}"
-        group: "{{ ansible_nas_user }}"
+        owner: "{{ ddclient_user_name }}"
+        group: "{{ ddclient_group_name }}"
       with_items:
         - "{{ ddclient_config_directory }}"
 
