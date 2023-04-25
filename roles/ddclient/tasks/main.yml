@@ -29,7 +29,7 @@
           PGID: "{{ ddclient_group_id }}"
         restart_policy: unless-stopped
         memory: "{{ ddclient_memory }}"
-        restart: "{{ ddclient is changed }}"
+        restart: "{{ ddclient_config is changed }}"
   when: ddclient_enabled is true
 
 - name: Stop Ddclient
