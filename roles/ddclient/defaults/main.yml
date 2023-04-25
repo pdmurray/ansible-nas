@@ -1,0 +1,28 @@
+---
+ddclient_enabled: false
+
+# directories
+ddclient_config_directory: "{{ docker_home }}/ddclient/config"
+
+# uid / gid
+ddclient_user_name: "{{ ansible_nas_user }}"
+ddclient_group_name: "{{ ansible_nas_user }}"
+ddclient_user_id: "0"
+ddclient_group_id: "0"
+
+ddclient_timezone: "{{ ansible_nas_timezone }}"
+
+# docker
+ddclient_container_name: ddclient
+
+# specs
+ddclient_memory: 1g
+
+# config
+ddclient_daemon: "300"
+ddclient_ssl: "yes"
+ddclient_use: "web, web=dynamicdns.park-your-domain.com/getip"
+ddclient_protocol: "namecheap"
+ddclient_server: "dynamicdns.park-your-domain.com"
+ddclient_login: "vpn_username"
+ddclient_password: "topsecret"

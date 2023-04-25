@@ -1,0 +1,41 @@
+---
+- name: Start Ddclient
+  block:
+    - name: Create Ddclient Directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ ansible_nas_user }}"
+        group: "{{ ansible_nas_user }}"
+      with_items:
+        - "{{ ddclient_config_directory }}"
+
+    - name: Template ddclient.conf
+      ansible.builtin.template:
+        src: ddclient.conf.j2
+        dest: "{{ ddclient_config_directory }}/ddclient.conf"
+      register: ddclient_config
+
+    - name: Ddclient Docker Container
+      community.docker.docker_container:
+        name: ddclient
+        image: linuxserver/ddclient
+        pull: true
+        volumes:
+          - "{{ ddclient_config_directory }}:/config:rw"
+        env:
+          TZ: "{{ ddclient_timezone }}"
+          PUID: "{{ ddclient_user_id }}"
+          PGID: "{{ ddclient_group_id }}"
+        restart_policy: unless-stopped
+        memory: "{{ ddclient_memory }}"
+        restart: "{{ ddclient is changed }}"
+  when: ddclient_enabled is true
+
+- name: Stop Ddclient
+  block:
+    - name: Stop Ddclient
+      community.docker.docker_container:
+        name: "{{ ddclient_container_name }}"
+        state: absent
+  when: ddclient_enabled is false
