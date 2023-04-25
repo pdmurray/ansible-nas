@@ -18,4 +18,6 @@ portainer_image_version: "latest"
 portainer_memory: 1g
 
 # certs
+portainer_ssl_enabled: false
 portainer_certs_directory: "{{ docker_home }}/portainer/certs"
+
