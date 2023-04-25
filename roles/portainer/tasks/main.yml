@@ -7,6 +7,7 @@
         state: directory
       with_items:
         - "{{ portainer_data_directory }}"
+        - "{{ portainer_certs_directory }}"
 
     - name: Portainer Docker Container
       community.docker.docker_container:
