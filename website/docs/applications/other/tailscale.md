@@ -26,7 +26,6 @@ If you want to use your Ansible-NAS as a Tailscale exit node (allowing other dev
 tailscale_exit_node: true
 ```
 
-
 ### Subnet Routes
 
 If you want to route traffic from your Ansible-NAS to other subnets, you can add them to the `tailscale_subnet_routes` list. For example:
@@ -36,7 +35,6 @@ tailscale_accept_routes: true
 tailscale_subnet_routes:
   - 10.0.0.0/8
 ```
-
 
 ### Additional Arguments
 
