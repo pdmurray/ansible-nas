@@ -1,0 +1,62 @@
+---
+- name: Install and start Tailscale
+  block:
+    - name: Add Tailscale GPG key
+      ansible.builtin.get_url:
+        url: https://pkgs.tailscale.com/stable/ubuntu/{{ ansible_facts['lsb']['codename'] }}.noarmor.gpg
+        dest: /usr/share/keyrings/tailscale-archive-keyring.gpg
+        mode: '0644'
+        force: true
+
+    - name: Add Tailscale repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu {{ ansible_facts['lsb']['codename'] }} main"
+        state: present
+        filename: tailscale
+
+    - name: Install Tailscale
+      ansible.builtin.apt:
+        name: tailscale
+        state: present
+        update_cache: yes
+
+    - name: Start Tailscale service
+      ansible.builtin.systemd:
+        name: tailscaled
+        state: started
+        enabled: yes
+
+    - name: Connect to Tailscale network
+      ansible.builtin.command: "tailscale up {{ tailscale_extra_args }} {% if tailscale_auth_key != '' %}--authkey={{ tailscale_auth_key }}{% endif %} {% if tailscale_accept_routes %}--accept-routes{% endif %} {% if tailscale_exit_node %}--advertise-exit-node{% endif %}"
+      register: tailscale_up
+      changed_when: tailscale_up.rc == 0
+      failed_when: tailscale_up.rc != 0 and 'already running' not in tailscale_up.stderr
+      when: not ansible_check_mode and lookup('env', 'MOLECULE_FILE', default='') == ''
+  when: tailscale_enabled is true
+
+- name: Stop Tailscale
+  block:
+    - name: Check if Tailscale is installed
+      ansible.builtin.stat:
+        path: /usr/bin/tailscale
+      register: tailscale_install
+
+    - name: Stop and Uninstall Tailscale
+      block:
+        - name: Disconnect from Tailscale network
+          ansible.builtin.command: tailscale down
+          when: tailscale_install.stat.exists
+
+        - name: Stop Tailscale service
+          ansible.builtin.systemd:
+            name: tailscaled
+            state: stopped
+            enabled: no
+            masked: no
+
+        - name: Uninstall Tailscale
+          ansible.builtin.apt:
+            name: tailscale
+            state: absent
+            purge: yes
+  when: not tailscale_enabled

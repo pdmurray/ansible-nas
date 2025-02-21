@@ -1,0 +1,24 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_vars:
+        file: ../../defaults/main.yml
+
+    - name: Check if Tailscale is installed
+      ansible.builtin.stat:
+        path: /usr/bin/tailscale
+      register: tailscale_binary
+      failed_when: tailscale_binary.stat.exists
+
+    - name: Get Tailscale service state
+      ansible.builtin.systemd:
+        name: tailscaled
+      register: service_result
+
+    - name: Check that Tailscale service is not running
+      ansible.builtin.assert:
+        that:
+          - service_result.status['ActiveState'] == "inactive"
+          - service_result.status['SubState'] == "dead"

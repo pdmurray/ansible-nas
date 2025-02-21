@@ -90,6 +90,7 @@ If you have a spare domain name you can configure applications to be accessible 
 * [Speedtest-Tracker](https://github.com/henrywhitaker3/Speedtest-Tracker) - Continuously track your internet speed
 * Stats - Monitor and visualise metrics about your NAS and internet connection using Grafana, Prometheus, Telegraf and more.
 * [Syncthing](https://syncthing.net/) - sync directories with another device
+* [Tailscale](https://tailscale.com/) - Connect your home server to the internet securely
 * [Tautulli](http://tautulli.com/) - Monitor Your Plex Media Server
 * [The Lounge](https://thelounge.chat) - Web based always-on IRC client
 * [TiddlyWiki](https://tiddlywiki.com) - A unique non-linear notebook/wiki for capturing, organizing, and sharing complex information
