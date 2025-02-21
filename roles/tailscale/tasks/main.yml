@@ -45,6 +45,8 @@
       block:
         - name: Disconnect from Tailscale network
           ansible.builtin.command: tailscale down
+          register: tailscale_down
+          changed_when: tailscale_down.rc == 0
           when: tailscale_install.stat.exists
 
         - name: Stop Tailscale service
