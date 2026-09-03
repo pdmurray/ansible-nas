@@ -22,6 +22,9 @@
         name: "{{ overseerr_container_name }}"
         image: "{{ overseerr_image_name }}:{{ overseerr_image_version }}"
         pull: true
+        # The old container still carries the sctx/overseerr image name; without
+        # this it is left in place. Becomes the default in community.docker 4.0.0.
+        image_name_mismatch: recreate
         init: true
         volumes:
           - "{{ overseerr_data_directory }}/config:/app/config:rw"
