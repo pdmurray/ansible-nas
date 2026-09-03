@@ -197,9 +197,12 @@
       tags:
         - homebridge
 
-    - role: homepage
-      tags:
-        - homepage
+    # Homepage is deployed as a Portainer stack, not by Ansible-NAS. Left
+    # commented out because a disabled role still runs its "Stop" block,
+    # which removes a container named "homepage".
+    # - role: homepage
+    #   tags:
+    #     - homepage
 
     - role: ispyagentdvr
       tags:
