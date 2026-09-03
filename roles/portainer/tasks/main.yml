@@ -38,7 +38,9 @@
           traefik.http.services.portainer.loadbalancer.server.port: "9443"
           traefik.http.routers.portainer.middlewares: "portainer-ipallowlist@docker"
           traefik.http.middlewares.portainer-ipallowlist.ipallowlist.sourcerange: "{{ portainer_ip_allowlist }}"
-        command: "{{ '--ssl --sslcert /certs/portainer.crt --sslkey /certs/portainer.key' if portainer_ssl_enabled is true else '' }}"
+        # --ssl/--sslcert/--sslkey are deprecated aliases; they assign to the
+        # same fields as these, so this is a straight rename.
+        command: "{{ '--tlsverify --tlscert /certs/portainer.crt --tlskey /certs/portainer.key' if portainer_ssl_enabled is true else '' }}"
   when: portainer_enabled is true
 
 - name: Stop Portainer
