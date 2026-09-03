@@ -10,6 +10,7 @@
         - "{{ transmission_config_directory }}"
         - "{{ transmission_download_directory }}"
         - "{{ transmission_watch_directory }}"
+        - "{{ transmission_custom_directory }}"
 
     - name: Transmission with VPN
       community.docker.docker_container:
@@ -22,10 +23,9 @@
           - "{{ transmission_config_directory }}:/config:rw"
           - "{{ transmission_watch_directory }}:/watch:rw"
           - "/etc/timezone:/etc/timezone:ro"
+          - "{{ transmission_custom_directory }}:/etc/openvpn/custom:rw"
         ports:
           - "{{ transmission_openvpn_webui_port }}:9091"
-          - "{{ transmission_openvpn_external_port }}:51413"
-          - "{{ transmission_openvpn_external_port }}:51413/udp"
           - "{{ transmission_openvpn_proxy_port }}:3128"
         env:
           TRANSMISSION_HOME: "/config"
