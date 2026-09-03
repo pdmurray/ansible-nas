@@ -7,10 +7,16 @@ overseerr_data_directory: "{{ docker_home }}/overseerr"
 
 # docker
 overseerr_container_name: "overseerr"
-overseerr_image_name: "sctx/overseerr"
+# Overseerr was rebranded to Seerr; the Seerr image migrates an existing
+# Overseerr config directory automatically on first start.
+# See https://docs.seerr.dev/migration-guide/
+overseerr_image_name: "ghcr.io/seerr-team/seerr"
 overseerr_image_version: "latest"
+# Seerr runs as the non-root "node" user (uid 1000) and does not honour
+# PUID/PGID. These are used to own the config directory instead.
 overseerr_user_id: "1000"
 overseerr_group_id: "1000"
+overseerr_log_level: "info"
 
 # network config
 overseerr_webui_port: "5055"
