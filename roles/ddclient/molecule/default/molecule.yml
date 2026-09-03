@@ -1,0 +1,7 @@
+---
+provisioner:
+  inventory:
+    group_vars:
+      all:
+        ddclient_enabled: true
+        ansible_nas_user: root
