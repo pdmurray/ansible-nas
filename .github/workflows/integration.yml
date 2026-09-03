@@ -3,8 +3,6 @@ name: Integration
 
 # Controls when the action will run.
 on:
-  schedule:
-    - cron:  '0 23 * * *'
   workflow_dispatch:
 
 
@@ -15,7 +13,7 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Generate Test Matrix
         id: set-matrix
         shell: bash
@@ -29,7 +27,7 @@ jobs:
         matrix:
             role: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Molecule Test
         uses: gofrolist/molecule-action@9866bc43fb400855b5838f47c3310f524664b924
         with:

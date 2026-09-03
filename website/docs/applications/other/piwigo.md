@@ -8,11 +8,11 @@ Piwigo is open source photo gallery software for the web. Designed for organisat
 
 ## Usage
 
-Set `piwigo_enabled: true` in your `inventories/<your_inventory>/nas.yml` file.
+Set `piwigo_enabled: true` in your `inventories/<your_inventory>/group_vars/nas.yml` file.
 
-If you want to access Piwigo externally, set `piwigo_available_externally: true` in your `inventories/<your_inventory>/nas.yml` file.
+If you want to access Piwigo externally, set `piwigo_available_externally: true` in your `inventories/<your_inventory>/group_vars/nas.yml` file.
 
-The Piwigo web interface can be found at <http://ansible_nas_host_or_ip:16923>.
+The Piwigo web interface can be found at [http://ansible_nas_host_or_ip:16923](http://ansible_nas_host_or_ip:16923).
 
 ## Specific Configuration
 
@@ -23,8 +23,8 @@ Optional configurations:
 - Set `piwigo_mysql_root_password` in `inventories/<your_inventory>/group_vars/nas.yml` before installing Piwigo, this defaults to "piwigo".
 
 - On first run you'll need to enter database details:
-  - Host: `db:3306`
-  - Username: the value of piwigo_mysql_user, defaults to "piwigo"
-  - Password: the value of piwigo_password, defaults to "piwigo"
+  - Host: `piwigo-db`
+  - Username: the value of piwigo_mysql_user, defaults to `piwigo`
+  - Password: the value of piwigo_password, defaults to `piwigo`
   - Database Name: `piwigo`
   - Database tables prefix: should be prefilled with `piwigo_`

@@ -2,9 +2,9 @@
 title: "Overseerr"
 ---
 
- Homepage: <https://docs.seerr.dev>
+ Homepage: [https://docs.seerr.dev](https://docs.seerr.dev)
 
- Docker Container: <https://github.com/seerr-team/seerr/pkgs/container/seerr>
+ Docker Container: [ghcr.io/seerr-team/seerr](https://github.com/seerr-team/seerr/pkgs/container/seerr)
 
  Overseerr is a free and open source software application for managing requests for your media library. It integrates with your existing services, such as Sonarr, Radarr, and Plex!
 
@@ -12,6 +12,6 @@ title: "Overseerr"
 
 ## Usage
 
- Using overseerr: Set `overseerr_enabled: true` in your `inventories/<your_inventory>/nas.yml` file.
+ Using overseerr: Set `overseerr_enabled: true` in your `inventories/<your_inventory>/group_vars/nas.yml` file.
 
- The overseerr web interface can be found at <http://ansible_nas_host_or_ip:5055>.
+ The overseerr web interface can be found at [http://ansible_nas_host_or_ip:5055](http://ansible_nas_host_or_ip:5055).

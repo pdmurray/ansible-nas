@@ -11,7 +11,7 @@
     #     - ansible-nas-users
     #     - ansible-nas
 
-    # - role: bertvv.samba
+    # - role: vladgh.samba.server
     #   tags:
     #     - samba
     #     - skip_ansible_lint
@@ -22,15 +22,10 @@
     #     - skip_ansible_lint
 
     # - role: geerlingguy.docker
-    #   when: ansible_architecture == "x86_64"
+    #   vars:
+    #     docker_apt_filename: download_docker_com_linux_ubuntu
     #   tags:
     #     - docker
-    #     - skip_ansible_lint
-
-    # - role: geerlingguy.docker_arm
-    #   when: ansible_architecture == "aarch64"
-    #   tags:
-    #     - docker_arm
     #     - skip_ansible_lint
 
     ###
@@ -47,11 +42,24 @@
         - ansible-nas
 
     ###
+    ### Stacks
+    ###
+
+    - role: logging
+      tags:
+        - logging
+
+
+    ###
     ### Applications
     ###
     - role: airsonic
       tags:
         - airsonic
+
+    - role: apcupsd
+      tags:
+        - apcupsd
 
     - role: bazarr
       tags:
@@ -69,6 +77,10 @@
       tags:
         - calibre
 
+    - role: calibreweb
+      tags:
+        - calibreweb
+
     - role: cloudcmd
       tags:
         - cloudcmd
@@ -76,6 +88,10 @@
     - role: cloudflare_ddns
       tags:
         - cloudflare_ddns
+
+    - role: couchdb
+      tags:
+        - couchdb
 
     - role: code-server
       tags:
@@ -92,6 +108,10 @@
     - role: ddclient
       tags:
         - ddclient
+
+    - role: ddns_updater
+      tags:
+        - ddns_updater
 
     - role: deluge
       tags:
@@ -124,6 +144,10 @@
     - role: firefly
       tags:
         - firefly
+
+    - role: flaresolverr
+      tags:
+        - flaresolverr
 
     - role: freshrss
       tags:
@@ -173,6 +197,14 @@
       tags:
         - homebridge
 
+    - role: homepage
+      tags:
+        - homepage
+
+    - role: ispyagentdvr
+      tags:
+        - ispyagentdvr
+
     - role: jackett
       tags:
         - jackett
@@ -197,9 +229,17 @@
       tags:
         - lidarr
 
+    - role: loki
+      tags:
+        - loki
+
     - role: mealie
       tags:
         - mealie
+
+    - role: minecraft-bedrock-server
+      tags:
+        - minecraft-bedrock-server
 
     - role: minecraft-server
       tags:
@@ -212,6 +252,10 @@
     - role: miniflux
       tags:
         - miniflux
+
+    - role: minio
+      tags:
+        - minio
 
     - role: mosquitto
       tags:
@@ -297,6 +341,10 @@
       tags:
         - prowlarr
 
+    - role: promtail
+      tags:
+        - promtail
+
     - role: pyload
       tags:
         - pyload
@@ -308,6 +356,10 @@
     - role: radarr
       tags:
         - radarr
+
+    - role: romm
+      tags:
+        - romm
 
     - role: route53_ddns
       tags:
@@ -324,6 +376,10 @@
     - role: sickchill
       tags:
         - sickchill
+
+    - role: silverbullet
+      tags:
+        - silverbullet
 
     - role: sonarr
       tags:
@@ -348,6 +404,10 @@
     - role: thelounge
       tags:
         - thelounge
+
+    - role: threadfin
+      tags:
+        - threadfin
 
     - role: tiddlywiki
       tags:
@@ -376,6 +436,10 @@
     - role: utorrent
       tags:
         - utorrent
+
+    - role: valheim
+      tags:
+        - valheim
 
     - role: virtual_desktop
       tags:
