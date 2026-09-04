@@ -13,9 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Lint docs
-        uses: articulate/actions-markdownlint@v1
-        with:
-          version: 0.32.2
+        run: npx --yes markdownlint-cli@0.49.1 .
 
   deploy:
     name: Deploy to GitHub Pages

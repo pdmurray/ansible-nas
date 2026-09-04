@@ -142,7 +142,7 @@ See [Installation](https://ansible-nas.io/docs/getting-started/installation/).
 
 ## Documentation
 
-You can read the docs [here](https://ansible-nas.io). PRs for more documentation always welcome!
+You can read the [Ansible-NAS documentation](https://ansible-nas.io). PRs for more documentation always welcome!
 
 ## Migrating from FreeNAS
 
