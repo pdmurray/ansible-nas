@@ -9,6 +9,73 @@
 
 After getting burned by broken FreeNAS updates one too many times, I figured I could do a much better job myself using just a stock Ubuntu install, some clever Ansible config and a bunch of Docker containers.
 
+## About this fork
+
+This is a personal fork of [davestephens/ansible-nas](https://github.com/davestephens/ansible-nas),
+merged up to upstream `main` and carrying local changes for a single Ubuntu VM that runs Docker
+under Portainer. Everything below is deliberate divergence; anything not listed here is unmodified
+upstream.
+
+To pull in upstream changes:
+
+```bash
+git remote add upstream https://github.com/davestephens/ansible-nas.git
+git fetch upstream
+git merge upstream/main
+```
+
+### Play composition
+
+Some roles are commented out of `nas.yml` rather than left disabled. A role set to
+`<app>_enabled: false` still runs its `Stop` block on every play, which removes a container of that
+name even when something else owns it — so "disabled" is not the same as "absent".
+
+* `ansible-nas-users`, `vladgh.samba.server`, `geerlingguy.nfs` and `geerlingguy.docker` — the host
+  baseline is managed outside Ansible on this machine.
+* `homepage` — Homepage is deployed as a Portainer stack here.
+* `ddclient` is added to the play. Upstream's `ddns_updater` is left in place but disabled.
+
+### Added roles
+
+* **ddclient** — dynamic DNS using [ddclient](https://github.com/ddclient/ddclient), with a
+  templated `ddclient.conf` and Molecule tests, following the layout of the upstream roles.
+
+### Changed roles
+
+* **overseerr** — deploys `ghcr.io/seerr-team/seerr` following the
+  [Seerr migration](https://docs.seerr.dev/migration-guide/). Seerr runs as the non-root `node`
+  user and ignores `PUID`/`PGID`, so the config directory is chowned instead; adds `init: true`, a
+  healthcheck, and `image_name_mismatch: recreate` so the image swap actually recreates the
+  container. Variable names, container name and data directory are unchanged, so existing installs
+  upgrade in place.
+* **portainer** — serves HTTPS on 9443 via `portainer_ssl_enabled` and
+  `portainer_certs_directory`, using `--tlsverify`/`--tlscert`/`--tlskey`. Upstream maps the host
+  port to plain HTTP on 9000.
+* **transmission-with-openvpn** — mounts a custom OpenVPN config directory at
+  `/etc/openvpn/custom`, sets `GLOBAL_APPLY_PERMISSIONS: "false"` (the container fails to start
+  otherwise on this host), drops the torrent port publishes, and adjusts the seed ratio and
+  external port.
+* **duplicati** — the Samba shares volume is commented out; only `docker_home` is backed up.
+* **ansible-nas-general** — the share permissions task is commented out, as there are no Samba
+  shares on this host.
+
+### Dashboard labels
+
+Upstream adds `homepage.*` Docker labels to 19 roles. Homepage auto-discovers any container
+carrying them, which injects cards into a hand-curated dashboard, in groups this setup does not
+use, with URLs pointing at the host IP rather than the reverse proxy. Those labels are stripped
+from every role here. Label discovery cannot be turned off separately from Homepage's Docker
+connection, and that connection is what gives the hand-written services their status badges.
+
+### CI
+
+* The lint job pins `ansible<12` and Python 3.11. Unpinned `ansible` installs ansible-core 2.19,
+  which removed a module that `ansible-lint` 6.14.6 imports at startup.
+* Workflows trigger on `master` as well as `main`, this fork's default branch being `master`.
+* Markdown linting runs as a pinned `npx markdownlint-cli@0.49.1` rather than through
+  `articulate/actions-markdownlint`, whose `version` input does not exist and was silently ignored,
+  leaving the linter floating.
+
 ## What Ansible-NAS Does
 
 You can configure Ansible-NAS to set up any (or all!) of the applications listed below on your home server.
