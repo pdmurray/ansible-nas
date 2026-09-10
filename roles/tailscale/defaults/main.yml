@@ -1,0 +1,15 @@
+---
+tailscale_enabled: false
+
+# Tailscale authentication key (optional)
+# If not provided, you'll need to authenticate manually
+tailscale_auth_key: ""
+
+# Whether to automatically accept routes
+tailscale_accept_routes: false
+
+# Whether to advertise as an exit node
+tailscale_exit_node: false
+
+# Additional Tailscale arguments
+tailscale_extra_args: ""

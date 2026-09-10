@@ -1,0 +1,20 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - ansible.builtin.include_vars:
+        file: ../../defaults/main.yml
+
+    - name: Get Tailscale service state
+      ansible.builtin.systemd:
+        name: tailscaled
+        state: started
+      register: service_result
+
+    - name: Check that Tailscale service is running
+      ansible.builtin.assert:
+        that:
+          - service_result.status['ActiveState'] == "active"
+          - service_result.status['Result'] == "success"
+          - service_result.state == "started"

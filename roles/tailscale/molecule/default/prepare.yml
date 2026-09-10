@@ -1,0 +1,11 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - gpg
+          - lsb-release
+        state: present
+        update_cache: yes
