@@ -1,2 +1,43 @@
 ---
 logging_stack_enabled: false
+
+logging_data_directory: "{{ docker_home }}/logging"
+
+# Images are pinned so upgrades are deliberate and reviewable.
+logging_grafana_image: "grafana/grafana:13.2.2"
+logging_loki_image: "grafana/loki:3.7.3"
+logging_alloy_image: "grafana/alloy:v1.19.2"
+
+logging_grafana_container_name: logging-grafana
+logging_loki_container_name: logging-loki
+logging_alloy_container_name: logging-alloy
+logging_network_name: logging
+
+# Grafana is the only published service. Keep it on localhost unless an
+# authenticated HTTPS reverse proxy or another protected access path is ready.
+logging_grafana_bind_address: "127.0.0.1"
+logging_grafana_port: "3001"
+logging_grafana_admin_user: admin
+logging_grafana_admin_password: ""
+logging_grafana_root_url: "http://localhost:{{ logging_grafana_port }}"
+logging_grafana_allow_sign_up: false
+
+logging_loki_retention: 672h
+logging_loki_log_level: warn
+logging_loki_ingestion_rate_mb: 8
+logging_loki_ingestion_burst_size_mb: 16
+
+# Configure a Grafana contact point after deployment to receive notifications.
+logging_error_alert_enabled: true
+logging_error_alert_interval: 1m
+logging_error_alert_for: 2m
+logging_error_alert_lookback_seconds: 300
+logging_error_alert_threshold: 0
+logging_error_pattern: "(?i)(error|fatal|panic|exception|critical)"
+
+logging_grafana_memory: 512m
+logging_loki_memory: 1g
+logging_alloy_memory: 256m
+
+# Keep label values low-cardinality.
+logging_environment: homelab

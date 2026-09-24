@@ -154,7 +154,7 @@ If you have a spare domain name you can configure applications to be accessible 
 * [Plex](https://www.plex.tv/) - Plex Media Server
 * [Portainer](https://portainer.io/) - for managing Docker and running custom images
 * [Prometheus](https://prometheus.io/) - Time series database and monitoring system (via stats role).
-* [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/) - Promtail is an agent which ships the contents of local logs to a private Grafana Loki instance
+* [Centralized logging](roles/logging/docs/logging.md) - Grafana, Loki, and Grafana Alloy automatically collect and search local Docker logs, with a provisioned error alert.
 * [Prowlarr](https://github.com/Prowlarr/Prowlarr) - Indexer aggregator for Sonarr, Radarr, Lidarr, etc.
 * [pyLoad](https://pyload.net/) - A download manager with a friendly web-interface
 * [PyTivo](http://pytivo.org) - An HMO and GoBack server for TiVos.
