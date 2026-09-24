@@ -1,0 +1,78 @@
+{
+  "annotations": {"list": []},
+  "editable": false,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "loki", "uid": "ansible-nas-loki"},
+      "description": "Count of log lines matching the configured error pattern.",
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}}, "overrides": []},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+      "id": 1,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [
+        {
+          "datasource": {"type": "loki", "uid": "ansible-nas-loki"},
+          "editorMode": "code",
+          "expr": "sum by (container) (count_over_time({source=\"docker\", container=~\"$container\"} |~ \"{{ logging_error_pattern }}\" [$__auto]))",
+          "legendFormat": "{{ '{{container}}' }}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Error-like logs by container",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "loki", "uid": "ansible-nas-loki"},
+      "gridPos": {"h": 16, "w": 24, "x": 0, "y": 8},
+      "id": 2,
+      "options": {"dedupStrategy": "none", "enableLogDetails": true, "prettifyLogMessage": false, "showCommonLabels": false, "showLabels": false, "showTime": true, "sortOrder": "Descending", "wrapLogMessage": true},
+      "targets": [
+        {
+          "datasource": {"type": "loki", "uid": "ansible-nas-loki"},
+          "editorMode": "code",
+          "expr": "{source=\"docker\", container=~\"$container\"} |~ \"$search\"",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Docker logs",
+      "type": "logs"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 41,
+  "tags": ["ansible-nas", "docker", "logs"],
+  "templating": {
+    "list": [
+      {
+        "current": {"text": "All", "value": ".*"},
+        "datasource": {"type": "loki", "uid": "ansible-nas-loki"},
+        "definition": "label_values({source=\"docker\"}, container)",
+        "includeAll": true,
+        "label": "Container",
+        "name": "container",
+        "query": "label_values({source=\"docker\"}, container)",
+        "refresh": 2,
+        "type": "query"
+      },
+      {
+        "current": {"text": "{{ logging_error_pattern }}", "value": "{{ logging_error_pattern }}"},
+        "label": "Search regex",
+        "name": "search",
+        "options": [],
+        "query": "{{ logging_error_pattern }}",
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {"from": "now-6h", "to": "now"},
+  "timezone": "browser",
+  "title": "Docker Logs",
+  "uid": "ansible-nas-docker-logs",
+  "version": 1
+}

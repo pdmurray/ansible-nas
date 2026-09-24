@@ -15,3 +15,9 @@ ansible_nas_timezone: Etc/UTC
 
 ## Enable some applications
 homepage_enabled: true
+
+## Centralized Docker logs (store the password in Ansible Vault)
+# logging_stack_enabled: true
+# logging_grafana_admin_password: !vault |
+#   $ANSIBLE_VAULT;1.1;AES256
+#   ...

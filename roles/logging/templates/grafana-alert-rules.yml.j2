@@ -1,0 +1,53 @@
+---
+apiVersion: 1
+
+{% if logging_error_alert_enabled | bool %}
+groups:
+  - orgId: 1
+    name: Docker log errors
+    folder: Ansible-NAS Alerts
+    interval: {{ logging_error_alert_interval }}
+    rules:
+      - uid: docker-error-logs
+        title: Error-like Docker logs detected
+        condition: A
+        data:
+          - refId: A
+            queryType: instant
+            relativeTimeRange:
+              from: {{ logging_error_alert_lookback_seconds }}
+              to: 0
+            datasourceUid: ansible-nas-loki
+            model:
+              datasource:
+                type: loki
+                uid: ansible-nas-loki
+              editorMode: code
+              expr: >-
+                sum(count_over_time({source="docker"} |~
+                "{{ logging_error_pattern }}"
+                [{{ logging_error_alert_lookback_seconds }}s])) >
+                {{ logging_error_alert_threshold }}
+              instant: true
+              intervalMs: 1000
+              maxDataPoints: 43200
+              queryType: instant
+              refId: A
+        noDataState: OK
+        execErrState: Error
+        for: {{ logging_error_alert_for }}
+        annotations:
+          description: >-
+            One or more Docker log lines matched the configured error pattern in
+            the last {{ logging_error_alert_lookback_seconds }} seconds. Open the
+            Docker Logs dashboard to identify the container and inspect context.
+          summary: Docker applications are emitting error-like logs
+        labels:
+          severity: warning
+          source: docker-logs
+        isPaused: false
+{% else %}
+deleteRules:
+  - orgId: 1
+    uid: docker-error-logs
+{% endif %}

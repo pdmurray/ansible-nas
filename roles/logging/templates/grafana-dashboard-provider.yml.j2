@@ -1,0 +1,15 @@
+---
+apiVersion: 1
+
+providers:
+  - name: Ansible-NAS Logging
+    orgId: 1
+    folder: Ansible-NAS
+    folderUid: ansible-nas
+    type: file
+    disableDeletion: false
+    allowUiUpdates: false
+    updateIntervalSeconds: 30
+    options:
+      path: /etc/grafana/dashboards
+      foldersFromFilesStructure: false
