@@ -1,3 +1,4 @@
+{% set dashboard_error_query = 'sum by (container) (count_over_time({source="docker", container=~"$container"} |~ ' ~ (logging_error_pattern | to_json) ~ ' [$__auto]))' %}
 {
   "annotations": {"list": []},
   "editable": false,
@@ -17,7 +18,7 @@
         {
           "datasource": {"type": "loki", "uid": "ansible-nas-loki"},
           "editorMode": "code",
-          "expr": "sum by (container) (count_over_time({source=\"docker\", container=~\"$container\"} |~ \"{{ logging_error_pattern }}\" [$__auto]))",
+          "expr": {{ dashboard_error_query | to_json }},
           "legendFormat": "{{ '{{container}}' }}",
           "queryType": "range",
           "refId": "A"
@@ -35,7 +36,7 @@
         {
           "datasource": {"type": "loki", "uid": "ansible-nas-loki"},
           "editorMode": "code",
-          "expr": "{source=\"docker\", container=~\"$container\"} |~ \"$search\"",
+          "expr": "{source=\"docker\", container=~\"$container\"} |~ `${search:raw}`",
           "queryType": "range",
           "refId": "A"
         }
@@ -44,7 +45,6 @@
       "type": "logs"
     }
   ],
-  "refresh": "30s",
   "schemaVersion": 41,
   "tags": ["ansible-nas", "docker", "logs"],
   "templating": {
@@ -61,11 +61,11 @@
         "type": "query"
       },
       {
-        "current": {"text": "{{ logging_error_pattern }}", "value": "{{ logging_error_pattern }}"},
+        "current": {"text": {{ logging_error_pattern | to_json }}, "value": {{ logging_error_pattern | to_json }}},
         "label": "Search regex",
         "name": "search",
         "options": [],
-        "query": "{{ logging_error_pattern }}",
+        "query": {{ logging_error_pattern | to_json }},
         "type": "textbox"
       }
     ]

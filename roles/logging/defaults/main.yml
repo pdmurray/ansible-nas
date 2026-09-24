@@ -33,7 +33,13 @@ logging_error_alert_interval: 1m
 logging_error_alert_for: 2m
 logging_error_alert_lookback_seconds: 300
 logging_error_alert_threshold: 0
-logging_error_pattern: "(?i)(error|fatal|panic|exception|critical)"
+# Match explicit severity markers, not incidental words such as "without error"
+# or Grafana's logged copy of its own alert query.
+logging_error_pattern: >-
+  (?i:(?:^|[^A-Za-z0-9_])(?:level|severity|loglevel|log_level|lvl)[^A-Za-z0-9_]{0,2}[:=][^A-Za-z0-9_]{0,2}(?:error|fatal|panic|critical)(?:$|[^A-Za-z0-9_])|\[(?:error|fatal|panic|critical)\]|^\s*(?:error|fatal|panic|critical)(?:\s|:|$))|(?:^|\s)(?:ERROR|FATAL|PANIC|CRITICAL)(?:\s|:|$)|(?:^|\s)[A-Za-z0-9_.]*Exception:
+# These are excluded from alerts only; they remain searchable in the dashboard.
+# The three logging stack containers are always excluded separately.
+logging_alert_excluded_containers: []
 
 logging_grafana_memory: 512m
 logging_loki_memory: 1g
