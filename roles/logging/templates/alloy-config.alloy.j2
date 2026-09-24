@@ -11,6 +11,14 @@ discovery.docker "containers" {
 discovery.relabel "containers" {
   targets = discovery.docker.containers.targets
 
+{% for container_name in logging_excluded_containers %}
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = {{ ('^/' ~ (container_name | regex_escape) ~ '$') | to_json }}
+    action        = "drop"
+  }
+
+{% endfor %}
   rule {
     source_labels = ["__meta_docker_container_name"]
     regex         = "/(.*)"

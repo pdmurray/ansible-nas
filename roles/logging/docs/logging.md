@@ -53,6 +53,33 @@ destination out of the repository.
 Tune noisy applications with `logging_error_pattern`, or disable the provisioned
 rule with `logging_error_alert_enabled: false` while retaining the dashboard.
 
+On first start, Alloy reads retained Docker logs. Loki rejects entries older
+than its default one-week ingestion window and some out-of-order historical
+entries. These errors should stop once Alloy catches up; the rejected copies
+remain in Docker's original logs.
+
+If Alloy repeatedly reports `configured logging driver does not support
+reading` for a container, identify its name and driver using the container ID
+from the error:
+
+```bash
+docker inspect --format '{{.Name}} log-driver={{.HostConfig.LogConfig.Type}}' <container-id>
+```
+
+Docker cannot supply logs from a container using the `none` logging driver
+through the Docker API. Exclude that container in inventory using its name
+without the leading `/`:
+
+```yaml
+logging_excluded_containers:
+  - example-container
+```
+
+The exclusion matches exact container names. Other containers remain
+automatically discovered. To collect logs from the excluded application,
+configure that application's logging driver to support `docker logs`, or add a
+separate log source for its output.
+
 ## Retention, security, and backup
 
 - Logs are retained for 28 days (`672h`) by default. Loki deletes by age, not by

@@ -41,3 +41,7 @@ logging_alloy_memory: 256m
 
 # Keep label values low-cardinality.
 logging_environment: homelab
+
+# Docker cannot provide logs for containers using an unreadable logging driver.
+# Exclude those containers by exact name to avoid repeated Alloy read errors.
+logging_excluded_containers: []
