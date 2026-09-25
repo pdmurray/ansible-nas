@@ -8,10 +8,28 @@
   "links": [],
   "panels": [
     {
+      "description": "Current state of the provisioned Docker log alert. No notification contact point is required.",
+      "gridPos": {"h": 4, "w": 24, "x": 0, "y": 0},
+      "id": 3,
+      "options": {
+        "alertName": "Error-like Docker logs detected",
+        "dashboardAlerts": false,
+        "groupBy": [],
+        "groupMode": "default",
+        "maxItems": 5,
+        "showInactiveAlerts": true,
+        "sortOrder": 1,
+        "stateFilter": {"error": true, "firing": true, "noData": true, "normal": true, "pending": true, "recovering": true},
+        "viewMode": "list"
+      },
+      "title": "Docker log alert status",
+      "type": "alertlist"
+    },
+    {
       "datasource": {"type": "loki", "uid": "ansible-nas-loki"},
       "description": "Count of log lines matching the configured error pattern.",
       "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}}, "overrides": []},
-      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 4},
       "id": 1,
       "options": {"legend": {"displayMode": "list", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "desc"}},
       "targets": [
@@ -29,7 +47,7 @@
     },
     {
       "datasource": {"type": "loki", "uid": "ansible-nas-loki"},
-      "gridPos": {"h": 16, "w": 24, "x": 0, "y": 8},
+      "gridPos": {"h": 16, "w": 24, "x": 0, "y": 12},
       "id": 2,
       "options": {"dedupStrategy": "none", "enableLogDetails": true, "prettifyLogMessage": false, "showCommonLabels": false, "showLabels": false, "showTime": true, "sortOrder": "Descending", "wrapLogMessage": true},
       "targets": [

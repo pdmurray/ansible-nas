@@ -77,13 +77,34 @@ class LoggingAlertTests(unittest.TestCase):
     def test_dashboard_uses_valid_json_and_no_forced_refresh(self):
         dashboard = json.loads(render("docker-logs-dashboard.json.j2"))
         self.assertNotIn("refresh", dashboard)
-        graph_expression = dashboard["panels"][0]["targets"][0]["expr"]
+        panels = {panel["id"]: panel for panel in dashboard["panels"]}
+        graph_expression = panels[1]["targets"][0]["expr"]
         self.assertEqual(logql_quoted_value(graph_expression, "|~ "), DEFAULTS["logging_error_pattern"])
-        logs_expression = dashboard["panels"][1]["targets"][0]["expr"]
+        logs_expression = panels[2]["targets"][0]["expr"]
         self.assertIn("|~ `${search:raw}`", logs_expression)
         search = dashboard["templating"]["list"][1]
         self.assertEqual(search["current"]["value"], DEFAULTS["logging_error_pattern"])
         self.assertEqual(search["query"], DEFAULTS["logging_error_pattern"])
+
+    def test_dashboard_shows_current_state_of_provisioned_alert(self):
+        dashboard = json.loads(render("docker-logs-dashboard.json.j2"))
+        alert = yaml.safe_load(render("grafana-alert-rules.yml.j2"))
+        panels = {panel["id"]: panel for panel in dashboard["panels"]}
+        status_panel = panels[3]
+        self.assertEqual(status_panel["type"], "alertlist")
+        self.assertEqual(
+            status_panel["options"]["alertName"],
+            alert["groups"][0]["rules"][0]["title"],
+        )
+        self.assertFalse(status_panel["options"]["dashboardAlerts"])
+        self.assertTrue(status_panel["options"]["showInactiveAlerts"])
+        self.assertTrue(all(status_panel["options"]["stateFilter"].values()))
+        self.assertEqual(status_panel["gridPos"]["y"], 0)
+        self.assertEqual(panels[1]["gridPos"]["y"], status_panel["gridPos"]["h"])
+        self.assertEqual(
+            panels[2]["gridPos"]["y"],
+            panels[1]["gridPos"]["y"] + panels[1]["gridPos"]["h"],
+        )
 
     def test_custom_pattern_is_escaped_in_both_provisioning_files(self):
         custom_pattern = 'level="error"|\\[Error\\]'
@@ -93,7 +114,9 @@ class LoggingAlertTests(unittest.TestCase):
         alert = yaml.safe_load(
             render("grafana-alert-rules.yml.j2", logging_error_pattern=custom_pattern)
         )
-        dashboard_query = dashboard["panels"][0]["targets"][0]["expr"]
+        dashboard_query = next(
+            panel for panel in dashboard["panels"] if panel["id"] == 1
+        )["targets"][0]["expr"]
         alert_query = alert["groups"][0]["rules"][0]["data"][0]["model"]["expr"]
         self.assertEqual(logql_quoted_value(dashboard_query, "|~ "), custom_pattern)
         self.assertEqual(logql_quoted_value(alert_query, "|~ "), custom_pattern)
