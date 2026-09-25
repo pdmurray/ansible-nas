@@ -2,6 +2,8 @@
 apiVersion: 1
 
 {% if logging_error_alert_enabled | bool %}
+{% set alert_excluded_containers = [logging_grafana_container_name, logging_loki_container_name, logging_alloy_container_name] + logging_alert_excluded_containers %}
+{% set alert_excluded_regex = alert_excluded_containers | map('regex_escape') | join('|') %}
 groups:
   - orgId: 1
     name: Docker log errors
@@ -24,8 +26,8 @@ groups:
                 uid: ansible-nas-loki
               editorMode: code
               expr: >-
-                sum(count_over_time({source="docker"} |~
-                "{{ logging_error_pattern }}"
+                sum(count_over_time({source="docker", container!~{{ alert_excluded_regex | to_json }}} |~
+                {{ logging_error_pattern | to_json }}
                 [{{ logging_error_alert_lookback_seconds }}s])) >
                 {{ logging_error_alert_threshold }}
               instant: true
@@ -38,10 +40,11 @@ groups:
         for: {{ logging_error_alert_for }}
         annotations:
           description: >-
-            One or more Docker log lines matched the configured error pattern in
-            the last {{ logging_error_alert_lookback_seconds }} seconds. Open the
-            Docker Logs dashboard to identify the container and inspect context.
-          summary: Docker applications are emitting error-like logs
+            One or more application log lines matched an explicit error severity
+            marker in the last {{ logging_error_alert_lookback_seconds }} seconds.
+            Open the Docker Logs dashboard to identify the container and inspect
+            context. The logging stack and configured alert exclusions are omitted.
+          summary: Docker applications are emitting error-severity logs
         labels:
           severity: warning
           source: docker-logs

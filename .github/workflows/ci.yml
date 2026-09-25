@@ -32,6 +32,9 @@ jobs:
       - name: Ansible-lint
         run: ansible-lint nas.yml
 
+      - name: Validate logging dashboard and alert templates
+        run: python3 tests/test_logging_alerts.py
+
       - name: Lint yaml files
         run: yamllint .
 

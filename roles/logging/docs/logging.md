@@ -37,21 +37,38 @@ specific VM address the proxy needs. Loki and Alloy are not published.
 ## Search and alerting
 
 Open **Dashboards > Ansible-NAS > Docker Logs**. The dashboard includes a
-container selector, a free-form LogQL regex filter, and a graph of error-like
-messages. The default filter is:
+status panel for the provisioned Docker log alert, a container selector, a
+free-form LogQL regex filter, and a graph of error-like messages. The status
+panel shows the alert's current state without requiring a notification contact
+point. It updates when you load the dashboard or click **Refresh**; automatic
+dashboard refresh is off by default. The default filter matches explicit
+severity markers such as `level=error`, `{"level":"error"}`, `[Error]`,
+`ERROR:`, or an exception class ending in `Exception:`. It does not treat
+ordinary text like `without error` as an error. Change the search box to inspect
+other text.
 
-```text
-(?i)(error|fatal|panic|exception|critical)
-```
-
-Grafana also evaluates an alert for the same pattern. It is visible under
+Grafana also evaluates an alert for the same pattern. The alert excludes the
+Grafana, Loki, and Alloy containers, so its own query logs cannot trigger it.
+Those containers remain searchable in the dashboard. The rule is visible under
 **Alerting > Alert rules**. To receive notifications, add a contact point in
 **Alerting > Contact points** and route alerts with `source=docker-logs` to it.
 This keeps credentials for email, Slack, Gotify-compatible webhooks, or another
 destination out of the repository.
 
-Tune noisy applications with `logging_error_pattern`, or disable the provisioned
-rule with `logging_error_alert_enabled: false` while retaining the dashboard.
+Tune the shared dashboard/alert matcher with `logging_error_pattern`. To keep
+collecting a noisy application's logs without alerting on them, add its exact
+container name to `logging_alert_excluded_containers`:
+
+```yaml
+logging_alert_excluded_containers:
+  - noisy-app
+```
+
+To disable the provisioned alert altogether while retaining the dashboard, set
+`logging_error_alert_enabled: false`; the status panel will then have no alert
+to display. The stricter default matcher may miss unstructured error messages
+without an explicit severity marker; tune it for your applications before
+relying on it for critical notifications.
 
 On first start, Alloy reads retained Docker logs. Loki rejects entries older
 than its default one-week ingestion window and some out-of-order historical
